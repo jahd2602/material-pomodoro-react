@@ -8,11 +8,10 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
-import TweenMax from 'gsap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './LoginPage.scss';
 import {Howl} from 'howler'
+import { FABButton, Icon, Button, Grid, Cell } from 'react-mdl';
 
 const title = 'Log In';
 
@@ -137,45 +136,20 @@ class LoginPage extends Component {
         this.pixelPos = this.timePos / this.secondsWidth * this.pixelWidth / this.timeMultiplier;
         this.renderTime();
         if (this.timePos == 0) {
-            this.wiggle();
             this.ringSound.stop().play();
         }
     };
 
-    wiggle() {
-        var element = ReactDOM.findDOMNode(this.refs.main).value;
-        /**************
-         Rotation
-         **************/
-        TweenMax.fromTo(element, .07, { // TODO can't load TweenMax
-            x: -4
-        }, {
-            x: 4,
-            ease: Power1.easeInOut,
-            yoyo: true,
-            repeat: 21,
-            onCompleteParams: [element],
-            onComplete: this.resetWiggle
-        });
-    }
-
-    resetWiggle(element) {
-        TweenMax.to(element, .05, {
-            x: 0,
-            ease: Power1.easeInOut
-        });
-    }
-
     render() {
         return (
-            <div className={s.root}>
-                <svg style={{display: 'none'}}>
-                    <defs>
-                        <path id="stempath"
-                              d="M45.263 56.325c-4.153 2.877-8.688 3.997-13.684 2.947-6.75-1.42-12.658-.133-17.343 5.274-.444.513-1.154.795-1.945.841 8.279-12.713 19.369-20.347 35.181-19.185-1.142-4.912-2.697-9.386-8.229-10.989 8.393-2.329 14.908.648 20.39 6.482 4.967-3.077 7.65-6.526 12.7-16.222 2.45 6.292 1.399 11.899-3.969 20.682 3.378 1.556 6.882 2.05 10.168.448 3.099-1.51 5.857-3.72 9.176-5.891-1.793 6.643-5.919 10.74-11.471 13.709-5.747 3.074-11.571 1.879-16.764.42l-9.355 19.685c-4.165-4.978-4.672-11.17-4.276-17.6l.219-.991-.798.39z"/>
-                    </defs>
-                </svg>
-                <div className={s.main} onMouseMove={this.mousemove} onMouseUp={this.mouseup} ref="main">
+            <Grid className={s.root}>
+                <Cell col={12} className={s.main} onMouseMove={this.mousemove} onMouseUp={this.mouseup} ref="main">
+                    <svg style={{display: 'none'}}>
+                        <defs>
+                            <path id="stempath"
+                                  d="M45.263 56.325c-4.153 2.877-8.688 3.997-13.684 2.947-6.75-1.42-12.658-.133-17.343 5.274-.444.513-1.154.795-1.945.841 8.279-12.713 19.369-20.347 35.181-19.185-1.142-4.912-2.697-9.386-8.229-10.989 8.393-2.329 14.908.648 20.39 6.482 4.967-3.077 7.65-6.526 12.7-16.222 2.45 6.292 1.399 11.899-3.969 20.682 3.378 1.556 6.882 2.05 10.168.448 3.099-1.51 5.857-3.72 9.176-5.891-1.793 6.643-5.919 10.74-11.471 13.709-5.747 3.074-11.571 1.879-16.764.42l-9.355 19.685c-4.165-4.978-4.672-11.17-4.276-17.6l.219-.991-.798.39z"/>
+                        </defs>
+                    </svg>
                     <svg className={s.stem} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                         <use xlinkHref="#stempath"/>
                     </svg>
@@ -184,8 +158,23 @@ class LoginPage extends Component {
                         <div className={s.timeline} ref="timeline"
                              style={{transform:'translateX(-' + this.pixelPos + 'px)'}}></div>
                     </div>
-                </div>
-            </div>
+                </Cell>
+                <Cell col={12}>
+                    <div className={s.controls} style={{marginTop:-70,width:350,marginLeft:'auto',marginRight:'auto'}}>
+                        <FABButton ripple className="mdl-color--white">
+                            <Icon name="stop"/>
+                        </FABButton>
+                        <FABButton ripple className="mdl-color--white" style={{float:'right'}}>
+                            <Icon name="pause"/>
+                        </FABButton>
+                    </div>
+                </Cell>
+                <Cell col={12} className="mdl-typography--text-center">
+                    <Button disabled className="mdl-color-text--white">Pomodoro</Button>
+                    <Button ripple>Short Break</Button>
+                    <Button ripple>Long Break</Button>
+                </Cell>
+            </Grid>
         );
     }
 

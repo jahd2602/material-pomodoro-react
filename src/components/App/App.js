@@ -12,7 +12,7 @@ import emptyFunction from 'fbjs/lib/emptyFunction';
 import s from './App.scss';
 import Feedback from '../Feedback';
 import Footer from '../Footer';
-import { Layout, Navigation, Header, IconButton, Menu, MenuItem, Content, Icon, Button  } from 'react-mdl';
+import { Layout, Navigation, Header, IconButton, Menu, MenuItem, Content, Icon, Button, Drawer  } from 'react-mdl';
 
 class App extends Component {
 
@@ -56,19 +56,17 @@ class App extends Component {
     render() {
         return !this.props.error ? (
             <div>
-                <Menu target="demo-menu-lower-right" align="right">
-                    <MenuItem>Some Action</MenuItem>
-                    <MenuItem>Another Action</MenuItem>
-                    <MenuItem disabled>Disabled Action</MenuItem>
-                    <MenuItem>Yet Another Action</MenuItem>
-                </Menu>
                 <Layout fixedHeader>
-                    <Header title={<span><Icon name="timer" style={{verticalAlign:'middle'}}/> Zen Pomodoro</span>} style={{color: 'brown',background: 'white'}}>
-                        <Navigation ripple>
-                            <IconButton name="volume_up" style={{color: 'brown'}}/>
-                            <IconButton name="more_vert" id="demo-menu-lower-right" style={{color: 'brown'}}/>
-                        </Navigation>
+                    <Header transparent>
                     </Header>
+                    <Drawer title="Zen Pomodoro">
+                        <Navigation>
+                            <a href="">Link</a>
+                            <a href="">Link</a>
+                            <a href="">Link</a>
+                            <a href="">Link</a>
+                        </Navigation>
+                    </Drawer>
                     <Content>
                         {this.props.children}
                     </Content>
