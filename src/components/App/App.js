@@ -10,8 +10,7 @@
 import React, { Component, PropTypes } from 'react';
 import emptyFunction from 'fbjs/lib/emptyFunction';
 import s from './App.scss';
-import Feedback from '../Feedback';
-import Footer from '../Footer';
+import TomatoPage from '../TomatoPage';
 import { Layout, Navigation, Header, IconButton, Menu, MenuItem, Content, Icon, Button, Drawer  } from 'react-mdl';
 
 class App extends Component {
@@ -68,7 +67,7 @@ class App extends Component {
                         </Navigation>
                     </Drawer>
                     <Content>
-                        {this.props.children}
+                        <TomatoPage/>
                     </Content>
                 </Layout>
             </div>
