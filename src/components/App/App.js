@@ -11,7 +11,7 @@ import React, { Component, PropTypes } from 'react';
 import emptyFunction from 'fbjs/lib/emptyFunction';
 import s from './App.scss';
 import TomatoPage from '../TomatoPage';
-import { Layout, Navigation, Header, IconButton, Menu, MenuItem, Content, Icon, Button, Drawer  } from 'react-mdl';
+import { Grid,Cell,Layout, Navigation, Header, IconButton, Menu, MenuItem, Content, Icon, Button, Drawer  } from 'react-mdl';
 
 class App extends Component {
 
@@ -59,11 +59,15 @@ class App extends Component {
                     <Header transparent>
                     </Header>
                     <Drawer title="Zen Pomodoro">
+                        <Grid shadow={1} style={{margin: '0'}}>
+                            <Cell col={12}>
+                                by Jairo Honorio
+                            </Cell>
+                        </Grid>
                         <Navigation>
-                            <a href="">Link</a>
-                            <a href="">Link</a>
-                            <a href="">Link</a>
-                            <a href="">Link</a>
+                            <a href="https://github.com/jahd2602">Github</a>
+                            <a href="https://pe.linkedin.com/in/jairohonorio">LinkedIn</a>
+                            <a href="mailto:jairo@jahdsoft.com">Email</a>
                         </Navigation>
                     </Drawer>
                     <Content>
