@@ -7,33 +7,39 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './TomatoPage.scss';
 import {Howl} from 'howler'
-import { FABButton, Icon, Button, Grid, Cell } from 'react-mdl';
+import {FABButton, Icon, Button, Grid, Cell} from 'react-mdl';
 
-const title = 'Log In';
+const title = 'Zen Pomodoro';
 
-class LoginPage extends Component {
+class TomatoPage extends Component {
 
     static contextTypes = {
         onSetTitle: PropTypes.func.isRequired,
     };
 
-    isDragging = false;
+    MODE_POMODORO = 0;
+    MODE_SHORT_BREAK = 1;
+    MODE_LONG_BREAK = 2;
+    MODE_CUSTOM = 3;
 
+    isDragging = false;
     oldPosX = 0;
-    pixelPos = 0;
-    timePos = 0;
     pixelWidth = 630;
-    secondsWidth = 25;
+    minutesWidth = 25;
     timeMultiplier = 1000 * 60;
+    pixelPos = this.pixelWidth;
+    timePos = this.minutesWidth * this.timeMultiplier;
     tickSound;
     turnSound;
     isTickPlaying = false;
     turnSoundDist = 25 / 2;
     ringSound;
+    paused = true;
+    mode = this.MODE_POMODORO;
 
     loadSounds() {
         this.tickSound = new Howl({
@@ -52,8 +58,7 @@ class LoginPage extends Component {
     }
 
     renderTime = () => {
-        //this.forceUpdate();
-        this.setState([{pixelPos: this.pixelPos}]);
+        this.forceUpdate();
         //this.refs.timeline.css('transform', 'translateX(-' + this.pixelPos + 'px)');
         //this.refs.timeline.css('-ms-transform', 'translateX(-' + this.pixelPos + 'px)');
         //this.refs.timeline.css('-moz-transform', 'translateX(-' + this.pixelPos + 'px)');
@@ -62,13 +67,13 @@ class LoginPage extends Component {
 
     lastTurnPos = 0;
 
-    mousemove = (e) => {
+    onMouseMove = (e) => {
         e.preventDefault();
         if (this.isDragging) {
-            var moveX = e.pageX - this.oldPosX;
+            let moveX = e.pageX - this.oldPosX;
             this.pixelPos -= moveX;
             this.pixelPos = Math.max(0, Math.min(this.pixelPos, this.pixelWidth));
-            this.timePos = Math.ceil(this.pixelPos * this.secondsWidth / this.pixelWidth * this.timeMultiplier);
+            this.timePos = Math.ceil(this.pixelPos * this.minutesWidth / this.pixelWidth * this.timeMultiplier);
             this.renderTime();
             if (moveX > 0) {
                 this.lastTurnPos = e.pageX;
@@ -87,27 +92,14 @@ class LoginPage extends Component {
 
     componentWillMount() {
         this.context.onSetTitle(title);
-
     }
 
     componentDidMount() {
         this.loadSounds();
         this.doTick();
-
-        // TODO implement sound enable / disable
-        //$('.sound').click(function (e) {
-        //    e.preventDefault();
-        //    if ($(this).hasClass('mute')) {
-        //        $(this).removeClass('mute');
-        //        tickSound.volume(0.5);
-        //    } else {
-        //        $(this).addClass('mute');
-        //        tickSound.volume(0.0);
-        //    }
-        //});
     }
 
-    mouseup = () => {
+    onMouseUp = () => {
         this.isDragging = false;
     };
 
@@ -116,9 +108,9 @@ class LoginPage extends Component {
     doTick = () => {
         //requestAnimationFrame(doTick);
         setTimeout(this.doTick, 10); //setTimeout so the timer will continue running even if in the background
-        var tickDuration = Date.now() - this.lastTick;
+        let tickDuration = Date.now() - this.lastTick;
         this.lastTick = Date.now();
-        if (this.isDragging || this.timePos <= 0) {
+        if (this.isDragging || this.timePos <= 0 || this.paused) {
             if (this.isTickPlaying) {
                 this.tickSound.stop();
                 this.isTickPlaying = false;
@@ -127,23 +119,65 @@ class LoginPage extends Component {
         }
         if (!this.isTickPlaying) {
             if (this.tickSound) {
+                this.tickSound.volume(0.5);
                 this.tickSound.play();
             }
             this.isTickPlaying = true;
+        } else if (this.tickSound.volume() > 0) {
+            this.tickSound.volume(this.tickSound.volume() - 0.001);
         }
-        this.timePos -= tickDuration;
-        this.timePos = Math.max(0, Math.min(this.timePos, this.secondsWidth * this.timeMultiplier));
-        this.pixelPos = this.timePos / this.secondsWidth * this.pixelWidth / this.timeMultiplier;
+        if (!this.paused) {
+            this.timePos -= tickDuration * 500; // TODO remove multiplier
+        }
+        this.timePos = Math.max(0, Math.min(this.timePos, this.minutesWidth * this.timeMultiplier));
+        this.pixelPos = this.timePos / this.minutesWidth * this.pixelWidth / this.timeMultiplier;
         this.renderTime();
-        if (this.timePos == 0) {
+        if (this.timePos === 0) {
             this.ringSound.stop().play();
+            this.paused = true;
+            this.forceUpdate();
         }
+    };
+
+    jumpToMode = () => {
+        if (this.mode === this.MODE_SHORT_BREAK) {
+            this.pixelPos = this.pixelWidth * .2;
+            this.timePos = this.minutesWidth * this.timeMultiplier * .2;
+        } else if (this.mode === this.MODE_LONG_BREAK) {
+            this.pixelPos = this.pixelWidth * .6;
+            this.timePos = this.minutesWidth * this.timeMultiplier * .6;
+        } else {
+            this.pixelPos = this.pixelWidth;
+            this.timePos = this.minutesWidth * this.timeMultiplier;
+            this.mode = this.MODE_POMODORO;
+        }
+    };
+
+    onPlayPauseClick = () => {
+        if (this.timePos === 0) {
+            this.ringSound.stop();
+            this.onStopClick();
+        }
+        this.paused = !this.paused;
+        this.forceUpdate();
+    };
+
+    onStopClick = () => {
+        this.jumpToMode();
+        this.paused = true;
+        this.ringSound.stop();
+        this.forceUpdate();
+    };
+
+    selectMode = (mode) => {
+        this.mode = mode;
+        this.onStopClick();
     };
 
     render() {
         return (
             <Grid className={s.root}>
-                <Cell col={12} className={s.main} onMouseMove={this.mousemove} onMouseUp={this.mouseup} ref="main">
+                <Cell col={12} className={s.main} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp} ref="main">
                     <svg style={{display: 'none'}}>
                         <defs>
                             <path id="stempath"
@@ -154,25 +188,39 @@ class LoginPage extends Component {
                         <use xlinkHref="#stempath"/>
                     </svg>
                     <div className={s.tomato} ref="tomato"
-                         onMouseDown={(e) => {e.preventDefault();this.isDragging = true}}>
+                         onMouseDown={(e) => {
+                             e.preventDefault();
+                             this.isDragging = true
+                         }}>
                         <div className={s.timeline} ref="timeline"
-                             style={{transform:'translateX(-' + this.pixelPos + 'px)'}}></div>
+                             style={{transform: 'translateX(-' + this.pixelPos + 'px)'}}></div>
                     </div>
                 </Cell>
                 <Cell col={12}>
-                    <div className={s.controls} style={{marginTop:-70,width:350,marginLeft:'auto',marginRight:'auto'}}>
-                        <FABButton ripple className="mdl-color--white">
+                    <div className={s.controls}
+                         style={{marginTop: -70, width: 350, marginLeft: 'auto', marginRight: 'auto'}}>
+                        <FABButton ripple className="mdl-color--white" onClick={this.onStopClick}>
                             <Icon name="stop"/>
                         </FABButton>
-                        <FABButton ripple className="mdl-color--white" style={{float:'right'}}>
-                            <Icon name="pause"/>
+                        <FABButton ripple className="mdl-color--white" style={{float: 'right'}}
+                                   onClick={this.onPlayPauseClick}>
+                            <Icon name={this.paused ? "play_arrow" : "pause"}/>
                         </FABButton>
                     </div>
                 </Cell>
                 <Cell col={12} className="mdl-typography--text-center">
-                    <Button disabled className="mdl-color-text--white">Pomodoro</Button>
-                    <Button ripple>Short Break</Button>
-                    <Button ripple>Long Break</Button>
+                    <Button className={this.mode === this.MODE_POMODORO ? "mdl-color-text--white" : null}
+                            onClick={() => this.selectMode(this.MODE_POMODORO)} ripple>
+                        Pomodoro
+                    </Button>
+                    <Button className={this.mode === this.MODE_SHORT_BREAK ? "mdl-color-text--white" : null}
+                            onClick={() => this.selectMode(this.MODE_SHORT_BREAK)} ripple>
+                        Short Break
+                    </Button>
+                    <Button className={this.mode === this.MODE_LONG_BREAK ? "mdl-color-text--white" : null}
+                            onClick={() => this.selectMode(this.MODE_LONG_BREAK)} ripple>
+                        Long Break
+                    </Button>
                 </Cell>
             </Grid>
         );
@@ -180,4 +228,4 @@ class LoginPage extends Component {
 
 }
 
-export default withStyles(LoginPage, s);
+export default withStyles(TomatoPage, s);
