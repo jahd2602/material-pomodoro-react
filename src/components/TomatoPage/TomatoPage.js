@@ -42,7 +42,7 @@ class TomatoPage extends Component {
     mode = this.MODE_POMODORO;
 
     loadSounds() {
-        this.tickSound = new Howl({ // TODO remote to local sounds
+        this.tickSound = new Howl({
             urls: ['sounds/pomodoro_tick.ogg', 'sounds/pomodoro_tick.mp3'],
             loop: true,
             volume: 0.5
@@ -52,7 +52,7 @@ class TomatoPage extends Component {
             urls: ['sounds/pomodoro_turn.ogg', 'sounds/pomodoro_turn.mp3']
         });
         this.ringSound = new Howl({
-            urls: ['sounds/pomodoro_ring.ogg', 'http://reneroth.org/projects/codepen/pomodoro_ring.mp3'],
+            urls: ['sounds/pomodoro_ring.ogg', 'sounds/pomodoro_ring.mp3'],
             volume: 1.0
         });
     }
