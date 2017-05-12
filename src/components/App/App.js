@@ -55,19 +55,20 @@ class App extends Component {
     render() {
         return !this.props.error ? (
             <div>
-                <Layout fixedHeader>
+                <Layout fixedDrawer>
                     <Header transparent>
                     </Header>
-                    <Drawer title="Zen Pomodoro">
+                    <Drawer>
                         <Grid shadow={1} style={{margin: '0'}}>
                             <Cell col={12}>
+                                <h1 style={{marginTop: '0'}}>Zen Pomodoro</h1>
                                 by Jairo Honorio
                             </Cell>
                         </Grid>
                         <Navigation>
-                            <a href="https://github.com/jahd2602">Github</a>
-                            <a href="https://pe.linkedin.com/in/jairohonorio">LinkedIn</a>
-                            <a href="mailto:jairo@jahdsoft.com">Email</a>
+                            <a href="https://github.com/jahd2602/material-pomodoro-react" target="blank"><Icon name="code"/> Github</a>
+                            <a href="https://pe.linkedin.com/in/jairohonorio" target="blank"><Icon name="portrait"/> LinkedIn</a>
+                            <a href="mailto:jairo@jahdsoft.com" target="blank"><Icon name="email"/> Email</a>
                         </Navigation>
                     </Drawer>
                     <Content>

@@ -127,7 +127,7 @@ class TomatoPage extends Component {
             this.tickSound.volume(this.tickSound.volume() - 0.001);
         }
         if (!this.paused) {
-            this.timePos -= tickDuration * 500; // TODO remove multiplier
+            this.timePos -= tickDuration;
         }
         this.timePos = Math.max(0, Math.min(this.timePos, this.minutesWidth * this.timeMultiplier));
         this.pixelPos = this.timePos / this.minutesWidth * this.pixelWidth / this.timeMultiplier;
@@ -197,8 +197,7 @@ class TomatoPage extends Component {
                     </div>
                 </Cell>
                 <Cell col={12}>
-                    <div className={s.controls}
-                         style={{marginTop: -70, width: 350, marginLeft: 'auto', marginRight: 'auto'}}>
+                    <div className={s.controls}>
                         <FABButton ripple className="mdl-color--white" onClick={this.onStopClick}>
                             <Icon name="stop"/>
                         </FABButton>
