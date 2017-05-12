@@ -21,7 +21,7 @@ import passport from './core/passport';
 import schema from './data/schema';
 import Router from './routes';
 import assets from './assets';
-import { port, auth, analytics } from './config';
+import {port, host, auth, analytics} from './config';
 
 const server = global.server = express();
 
@@ -129,7 +129,8 @@ server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 //
 // Launch the server
 // -----------------------------------------------------------------------------
-server.listen(port, () => {
+console.log(`Opening port at http://${host}:${port}/`);
+server.listen(port,host, () => {
   /* eslint-disable no-console */
-  console.log(`The server is running at http://localhost:${port}/`);
+  console.log(`The server is running at http://${host}:${port}/`);
 });

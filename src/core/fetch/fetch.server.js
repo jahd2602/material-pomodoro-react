@@ -8,7 +8,7 @@
  */
 
 import fetch, { Request, Headers, Response } from 'node-fetch';
-import { host } from '../../config';
+import { host,port } from '../../config';
 
 function localUrl(url) {
   if (url.startsWith('//')) {
@@ -19,7 +19,7 @@ function localUrl(url) {
     return url;
   }
 
-  return `http://${host}${url}`;
+  return `http://${host}:${port}${url}`;
 }
 
 function localFetch(url, options) {
