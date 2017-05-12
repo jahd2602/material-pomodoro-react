@@ -57,14 +57,6 @@ class TomatoPage extends Component {
         });
     }
 
-    renderTime = () => {
-        this.forceUpdate();
-        //this.refs.timeline.css('transform', 'translateX(-' + this.pixelPos + 'px)');
-        //this.refs.timeline.css('-ms-transform', 'translateX(-' + this.pixelPos + 'px)');
-        //this.refs.timeline.css('-moz-transform', 'translateX(-' + this.pixelPos + 'px)');
-        //this.refs.timeline.css('-webkit-transform', 'translateX(-' + this.pixelPos + 'px)');
-    };
-
     lastTurnPos = 0;
 
     onMouseMove = (e) => {
@@ -74,7 +66,7 @@ class TomatoPage extends Component {
             this.pixelPos -= moveX;
             this.pixelPos = Math.max(0, Math.min(this.pixelPos, this.pixelWidth));
             this.timePos = Math.ceil(this.pixelPos * this.minutesWidth / this.pixelWidth * this.timeMultiplier);
-            this.renderTime();
+            this.forceUpdate();
             if (moveX > 0) {
                 this.lastTurnPos = e.pageX;
             }
@@ -106,7 +98,6 @@ class TomatoPage extends Component {
     lastTick = Date.now();
 
     doTick = () => {
-        //requestAnimationFrame(doTick);
         setTimeout(this.doTick, 10); //setTimeout so the timer will continue running even if in the background
         let tickDuration = Date.now() - this.lastTick;
         this.lastTick = Date.now();
@@ -131,7 +122,8 @@ class TomatoPage extends Component {
         }
         this.timePos = Math.max(0, Math.min(this.timePos, this.minutesWidth * this.timeMultiplier));
         this.pixelPos = this.timePos / this.minutesWidth * this.pixelWidth / this.timeMultiplier;
-        this.renderTime();
+        this.forceUpdate();
+
         if (this.timePos === 0) {
             this.ringSound.stop().play();
             this.paused = true;

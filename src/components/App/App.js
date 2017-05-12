@@ -7,11 +7,25 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import emptyFunction from 'fbjs/lib/emptyFunction';
 import s from './App.scss';
 import TomatoPage from '../TomatoPage';
-import { Grid,Cell,Layout, Navigation, Header, IconButton, Menu, MenuItem, Content, Icon, Button, Drawer  } from 'react-mdl';
+import {
+    Grid,
+    Cell,
+    Layout,
+    Navigation,
+    Header,
+    IconButton,
+    Menu,
+    MenuItem,
+    Content,
+    Icon,
+    Button,
+    Drawer
+} from 'react-mdl';
+import {version} from './../../../package.json';
 
 class App extends Component {
 
@@ -44,7 +58,7 @@ class App extends Component {
     }
 
     componentWillMount() {
-        const { insertCss } = this.props.context;
+        const {insertCss} = this.props.context;
         this.removeCss = insertCss(s);
     }
 
@@ -58,17 +72,28 @@ class App extends Component {
                 <Layout fixedDrawer>
                     <Header transparent>
                     </Header>
-                    <Drawer>
+                    <Drawer className={s.drawer}>
                         <Grid shadow={1} style={{margin: '0'}}>
                             <Cell col={12}>
-                                <h1 style={{marginTop: '0'}}>Zen Pomodoro</h1>
-                                by Jairo Honorio
+                                <h1>Zen Pomodoro</h1>
+                                <div>
+                                    by Jairo Honorio
+                                </div>
+                                <div className="mdl-color-text--grey">
+                                    version {version}
+                                </div>
                             </Cell>
                         </Grid>
                         <Navigation>
-                            <a href="https://github.com/jahd2602/material-pomodoro-react" target="blank"><Icon name="code"/> Github</a>
-                            <a href="https://pe.linkedin.com/in/jairohonorio" target="blank"><Icon name="portrait"/> LinkedIn</a>
-                            <a href="mailto:jairo@jahdsoft.com" target="blank"><Icon name="email"/> Email</a>
+                            <a href="https://github.com/jahd2602/material-pomodoro-react" target="blank">
+                                <Icon name="code"/> Github
+                            </a>
+                            <a href="https://pe.linkedin.com/in/jairohonorio" target="blank">
+                                <Icon name="portrait"/> LinkedIn
+                            </a>
+                            <a href="mailto:jairo@jahdsoft.com" target="blank">
+                                <Icon name="email"/> Email
+                            </a>
                         </Navigation>
                     </Drawer>
                     <Content>
