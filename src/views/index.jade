@@ -10,6 +10,8 @@ html(class="no-js", lang="")
         style#css!= css
         style
             include material.brown-green.min.css
+        style
+                    include ../../node_modules/normalize.css/normalize.css
         script(src="extra/material.min.js")
     body
         #app!= body
