@@ -1,4 +1,4 @@
-##Pomodoro Zen
+## Pomodoro Zen
 
 Useful [pomodoro technique](https://en.wikipedia.org/wiki/Pomodoro_Technique) utility following material design principles. 
 
