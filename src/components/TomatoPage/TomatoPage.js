@@ -33,13 +33,16 @@ class TomatoPage extends Component {
     timeMultiplier = 1000 * 60;
     pixelPos = this.pixelWidth;
     timePos = this.minutesWidth * this.timeMultiplier;
-    tickSound;
-    turnSound;
     isTickPlaying = false;
     turnSoundDist = 25 / 2;
-    ringSound;
+    lastTurnPos = 0;
+    lastTick = Date.now();
     paused = true;
     mode = this.MODE_POMODORO;
+
+    tickSound;
+    turnSound;
+    ringSound;
 
     loadSounds() {
         this.tickSound = new Howl({
@@ -57,31 +60,6 @@ class TomatoPage extends Component {
         });
     }
 
-    lastTurnPos = 0;
-
-    onMouseMove = (e) => {
-        e.preventDefault();
-        if (this.isDragging) {
-            let moveX = e.pageX - this.oldPosX;
-            this.pixelPos -= moveX;
-            this.pixelPos = Math.max(0, Math.min(this.pixelPos, this.pixelWidth));
-            this.timePos = Math.ceil(this.pixelPos * this.minutesWidth / this.pixelWidth * this.timeMultiplier);
-            this.forceUpdate();
-            if (moveX > 0) {
-                this.lastTurnPos = e.pageX;
-            }
-            if (e.pageX - this.lastTurnPos < -this.turnSoundDist) {
-                if (this.pixelPos < this.pixelWidth) {
-                    this.turnSound.play();
-                }
-                this.lastTurnPos = e.pageX;
-            }
-        } else {
-            this.lastTurnPos = e.pageX;
-        }
-        this.oldPosX = e.pageX;
-    };
-
     componentWillMount() {
         this.context.onSetTitle(title);
     }
@@ -91,11 +69,47 @@ class TomatoPage extends Component {
         this.doTick();
     }
 
+    onMouseDown = (event) => {
+        event.preventDefault();
+
+        if (event.touches) {
+            let posX = event.touches[0].pageX;
+            this.oldPosX = posX;
+            this.lastTurnPos = posX;
+        }
+        this.isDragging = true
+    };
+
+    onMouseMove = (event) => {
+        event.preventDefault();
+
+        // Detects wether the event comes from a mouse or a touch
+        const posX = !event.touches ? event.pageX : event.touches[0].pageX;
+
+        if (this.isDragging) {
+            let moveX = posX - this.oldPosX;
+            this.pixelPos -= moveX;
+            this.pixelPos = Math.max(0, Math.min(this.pixelPos, this.pixelWidth));
+            this.timePos = Math.ceil(this.pixelPos * this.minutesWidth / this.pixelWidth * this.timeMultiplier);
+            this.forceUpdate();
+            if (moveX > 0) {
+                this.lastTurnPos = posX;
+            }
+            if (posX - this.lastTurnPos < -this.turnSoundDist) {
+                if (this.pixelPos < this.pixelWidth) {
+                    this.turnSound.play();
+                }
+                this.lastTurnPos = posX;
+            }
+        } else {
+            this.lastTurnPos = posX;
+        }
+        this.oldPosX = posX;
+    };
+
     onMouseUp = () => {
         this.isDragging = false;
     };
-
-    lastTick = Date.now();
 
     doTick = () => {
         setTimeout(this.doTick, 10); //setTimeout so the timer will continue running even if in the background
@@ -169,7 +183,9 @@ class TomatoPage extends Component {
     render() {
         return (
             <Grid className={s.root}>
-                <Cell col={12} className={s.main} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp} ref="main">
+                <Cell col={12} className={s.main} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp}
+                      onTouchMove={this.onMouseMove} onTouchEnd={this.onMouseUp}
+                      ref="main">
                     <svg style={{display: 'none'}}>
                         <defs>
                             <path id="stempath"
@@ -179,15 +195,13 @@ class TomatoPage extends Component {
                     <svg className={s.stem} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                         <use xlinkHref="#stempath"/>
                     </svg>
-                    <div className={s.tomato} ref="tomato"
-                         onMouseDown={(e) => {
-                             e.preventDefault();
-                             this.isDragging = true
-                         }}>
+                    <div className={s.tomato} ref="tomato" onMouseDown={this.onMouseDown}
+                         onTouchStart={this.onMouseDown}>
                         <div className={s.timeline} ref="timeline"
                              style={{transform: 'translateX(-' + this.pixelPos + 'px)'}}></div>
                     </div>
                 </Cell>
+
                 <Cell col={12}>
                     <div className={s.controls}>
                         <FABButton ripple className="mdl-color--white" onClick={this.onStopClick}>
@@ -199,6 +213,7 @@ class TomatoPage extends Component {
                         </FABButton>
                     </div>
                 </Cell>
+
                 <Cell col={12} className="mdl-typography--text-center">
                     <Button className={this.mode === this.MODE_POMODORO ? "mdl-color-text--white" : null}
                             onClick={() => this.selectMode(this.MODE_POMODORO)} ripple>
