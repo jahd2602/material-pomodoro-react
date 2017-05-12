@@ -1,4 +1,14 @@
 {
+  "name": "material-pomodoro",
+  "version": "2017.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jahd2602/material-pomodoro-react.git"
+  },
+  "author": {
+    "name": "Jairo Honorio",
+    "email": "jairo@jahdsoft.com"
+  },
   "private": true,
   "engines": {
     "node": ">=5.0 <6",
