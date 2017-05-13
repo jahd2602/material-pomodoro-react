@@ -1,7 +1,5 @@
 /**
- * React Starter Kit (https://www.reactstarterkit.com/)
- *
- * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
+ * Copyright © 2017 Jairo Honorio. All rights reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -17,12 +15,8 @@ import {
     Layout,
     Navigation,
     Header,
-    IconButton,
-    Menu,
-    MenuItem,
     Content,
     Icon,
-    Button,
     Drawer
 } from 'react-mdl';
 import {version} from './../../../package.json';
