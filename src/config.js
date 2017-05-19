@@ -18,7 +18,7 @@ export const databaseUrl = process.env.DATABASE_URL || 'postgresql://demo:Lqk62x
 export const analytics = {
 
   // https://analytics.google.com/
-  google: { trackingId: process.env.GOOGLE_TRACKING_ID || 'UA-XXXXX-X' },
+  google: { trackingId: process.env.GOOGLE_TRACKING_ID || 'UA-37438543-4' },
 
 };
 
