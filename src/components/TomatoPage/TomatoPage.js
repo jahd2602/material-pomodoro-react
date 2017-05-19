@@ -19,6 +19,10 @@ class TomatoPage extends Component {
         onSetTitle: PropTypes.func.isRequired,
     };
 
+    static propTypes = {
+        getConfig: PropTypes.func.isRequired
+    };
+
     MODE_POMODORO = 0; // 25 minutes
     MODE_SHORT_BREAK = 1; // 5 minutes
     MODE_LONG_BREAK = 2; // 15 minutes
@@ -132,13 +136,13 @@ class TomatoPage extends Component {
 
         if (!this.isTickPlaying) {
             // Start playing the tick sound
-            if (this.tickSound) {
+            if (this.tickSound && this.props.getConfig().tickSoundConfig !== '0') {
                 this.tickSound.volume(0.5);
                 this.tickSound.play();
             }
             this.isTickPlaying = true;
-        } else if (this.tickSound.volume() > 0) {
-            this.tickSound.volume(this.tickSound.volume() - 0.001); // Decreases tick volume over a few seconds
+        } else if (this.tickSound.volume() > 0 && this.props.getConfig().tickSoundConfig === '2') {
+            this.tickSound.volume(this.tickSound.volume() - 0.002); // Decreases tick volume over a few seconds
         }
 
         // Reduce the remaining time in the clock down to 0
@@ -207,7 +211,7 @@ class TomatoPage extends Component {
                     <Cell col={12} className="mdl-typography--text-center">
                         <Chip className="mdl-color--white" onClose={this.hideHelpChip}>
                             <a href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank"
-                            className="mdl-color-text--black">
+                               className="mdl-color-text--black">
                                 What is the Pomodoro Technique?
                             </a>
                         </Chip>
