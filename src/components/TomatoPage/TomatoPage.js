@@ -9,7 +9,7 @@ import React, {Component, PropTypes} from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './TomatoPage.scss';
 import {Howl} from 'howler'
-import {FABButton, Icon, Button, Grid, Cell} from 'react-mdl';
+import {FABButton, Icon, Button, Grid, Cell, Chip} from 'react-mdl';
 
 const title = 'Zen Pomodoro';
 
@@ -37,6 +37,7 @@ class TomatoPage extends Component {
     lastTick = Date.now();
     paused = true;
     mode = this.MODE_POMODORO;
+    showChip = true;
 
     tickSound;
     turnSound;
@@ -194,9 +195,23 @@ class TomatoPage extends Component {
         this.onStopClick();
     };
 
+    hideHelpChip = () => {
+        this.showChip = false;
+        this.forceUpdate();
+    };
+
     render() {
         return (
             <Grid className={s.root}>
+                { this.showChip ?
+                    <Cell col={12} className="mdl-typography--text-center">
+                        <Chip className="mdl-color--white" onClose={this.hideHelpChip}>
+                            <a href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank"
+                            className="mdl-color-text--black">
+                                What is the Pomodoro Technique?
+                            </a>
+                        </Chip>
+                    </Cell> : null }
                 <Cell
                     col={12}
                     className={s.main}
