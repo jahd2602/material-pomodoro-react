@@ -112,7 +112,7 @@ class TomatoPage extends Component {
   lastTurnPos = 0;
   lastTick = Date.now();
   paused = true;
-  mode = this.MODE_POMODORO;
+  mode = TomatoPage.MODE_POMODORO;
   showWhatIsPomodoroChip = true;
   showWDontLockDeviceChip = true;
   showWDontLockDeviceCard = false;
@@ -188,13 +188,13 @@ class TomatoPage extends Component {
       this.pixelPos = this.pixelWidth * multiplier;
       this.timePos = this.minutesWidth * this.timeMultiplier * multiplier;
     };
-    if (this.mode === this.MODE_SHORT_BREAK) { // 5 minutes
+    if (this.mode === TomatoPage.MODE_SHORT_BREAK) { // 5 minutes
       setPos(0.2);
-    } else if (this.mode === this.MODE_LONG_BREAK) { // 15 minutes
+    } else if (this.mode === TomatoPage.MODE_LONG_BREAK) { // 15 minutes
       setPos(0.6);
     } else { // 25 minutes, full clock
       setPos(1);
-      this.mode = this.MODE_POMODORO;
+      this.mode = TomatoPage.MODE_POMODORO;
     }
   };
 
@@ -354,22 +354,22 @@ class TomatoPage extends Component {
           className="mdl-typography--text-center"
         >
           <Button
-            className={this.mode === this.MODE_POMODORO ? 'mdl-color-text--white' : null}
-            onClick={() => this.selectMode(this.MODE_POMODORO)}
+            className={this.mode === TomatoPage.MODE_POMODORO ? 'mdl-color-text--white' : null}
+            onClick={() => this.selectMode(TomatoPage.MODE_POMODORO)}
             ripple
           >
             Pomodoro
           </Button>
           <Button
-            className={this.mode === this.MODE_SHORT_BREAK ? 'mdl-color-text--white' : null}
-            onClick={() => this.selectMode(this.MODE_SHORT_BREAK)}
+            className={this.mode === TomatoPage.MODE_SHORT_BREAK ? 'mdl-color-text--white' : null}
+            onClick={() => this.selectMode(TomatoPage.MODE_SHORT_BREAK)}
             ripple
           >
             Short Break
           </Button>
           <Button
-            className={this.mode === this.MODE_LONG_BREAK ? 'mdl-color-text--white' : null}
-            onClick={() => this.selectMode(this.MODE_LONG_BREAK)}
+            className={this.mode === TomatoPage.MODE_LONG_BREAK ? 'mdl-color-text--white' : null}
+            onClick={() => this.selectMode(TomatoPage.MODE_LONG_BREAK)}
             ripple
           >
             Long Break

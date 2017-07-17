@@ -4,7 +4,7 @@ html(class="no-js", lang="")
         meta(charset="utf-8")
         meta(http-equiv="x-ua-compatible", content="ie=edge")
         title= title
-        meta(name="description", content=description)
+        meta(name="description", content="The Pomodoro Technique is a time management method that uses a timer to break down work into intervals, traditionally 25 minutes in length, separated by short breaks.")
         meta(property="og:image", content="http://zen.jahdsoft.com/images/screenshot.png")
         meta(name="viewport", content="width=device-width, initial-scale=1")
         link(rel="apple-touch-icon", href="apple-touch-icon.png")
@@ -12,15 +12,15 @@ html(class="no-js", lang="")
         style
             include material.brown-green.min.css
         style
-                    include ../../node_modules/normalize.css/normalize.css
+            include ../../node_modules/normalize.css/normalize.css
         script(src="extra/material.min.js")
     body
         #app!= body
         script(src=entry)
         script.
-            window.ga = function () {
-                ga.q.push(arguments)
-            };ga.q = [];ga.l = +new Date;
-            ga('create', '#{trackingId}', 'auto');ga('send', 'pageview')
+          window.ga = function () {
+            ga.q.push(arguments)
+          };ga.q = [];ga.l = +new Date;
+          ga('create', '#{trackingId}', 'auto');ga('send', 'pageview')
         if trackingId
             script(src="https://www.google-analytics.com/analytics.js", async=true, defer=true)
