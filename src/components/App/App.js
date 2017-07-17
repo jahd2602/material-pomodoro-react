@@ -83,8 +83,8 @@ class App extends Component {
     tickSoundConfig: this.state.tickSoundConfig,
   });
 
-  handleOpenDialog = () => {
-    this.setState({ openDialog: true });
+  handleToggleDialog = () => {
+    this.setState({ openDialog: !this.state.openDialog });
   };
 
   handleCloseDialog = () => {
@@ -103,6 +103,8 @@ class App extends Component {
             >
               <Cell col={12}>
                 <h1>Zen Pomodoro</h1>
+              </Cell>
+              <Cell col={8}>
                 <div>
                   by Jairo Honorio
                 </div>
@@ -110,14 +112,56 @@ class App extends Component {
                   version {version}
                 </div>
               </Cell>
+              <Cell col={4}>
+                <Button
+                  ripple
+                  onClick={this.handleToggleDialog}
+                >
+                  <Icon name="settings" />
+                </Button>
+              </Cell>
+              { this.state.openDialog ?
+                <Cell col={12}>
+                  <Grid
+                    shadow={1}
+                    style={{ margin: '0' }}
+                  >
+                    <Cell col={6}>
+                      Tick sound
+                    </Cell>
+                    <Cell col={6}>
+                      <RadioGroup
+                        name="tickSoundConfig"
+                        value={this.state.tickSoundConfig}
+                        childContainer="div"
+                        onChange={this.onTickSoundConfigChange}
+                      >
+                        <Radio
+                          value="2"
+                          ripple
+                        >
+                          Starting
+                        </Radio>
+                        <Radio
+                          value="1"
+                          ripple
+                        >
+                          On
+                        </Radio>
+                        <Radio
+                          value="0"
+                          ripple
+                        >
+                          Off
+                        </Radio>
+                      </RadioGroup>
+                    </Cell>
+                  </Grid>
+                </Cell>
+                : null}
             </Grid>
+
             <Navigation>
-              <a
-                href="#"
-                onClick={this.handleOpenDialog}
-              >
-                <Icon name="settings" /> Options
-              </a>
               <a
                 href="https://github.com/jahd2602/material-pomodoro-react"
                 target="blank"
@@ -142,54 +186,6 @@ class App extends Component {
             <TomatoPage getConfig={this.onGetConfig} />
           </Content>
         </Layout>
-        <Dialog
-          open={this.state.openDialog}
-          onCancel={this.handleCloseDialog}
-        >
-          <DialogTitle>Options</DialogTitle>
-          <DialogContent>
-            <Grid>
-              <Cell col={6}>
-                Tick sound
-              </Cell>
-              <Cell col={6}>
-                <RadioGroup
-                  name="tickSoundConfig"
-                  value={this.state.tickSoundConfig}
-                  childContainer="div"
-                  onChange={this.onTickSoundConfigChange}
-                >
-                  <Radio
-                    value="2"
-                    ripple
-                  >
-                    Starting
-                  </Radio>
-                  <Radio
-                    value="1"
-                    ripple
-                  >
-                    On
-                  </Radio>
-                  <Radio
-                    value="0"
-                    ripple
-                  >
-                    Off
-                  </Radio>
-                </RadioGroup>
-              </Cell>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              type="button"
-              onClick={this.handleCloseDialog}
-            >
-              OK
-            </Button>
-          </DialogActions>
-        </Dialog>
       </div>
     ) : this.props.children;
   }
