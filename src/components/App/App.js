@@ -251,7 +251,7 @@ class App extends Component {
               <Cell col={6}>
                 <PinterestShareButton
                   url={shareUrl}
-                  media="/images/screenshot.png"
+                  media="http://zen.jahdsoft.com/images/screenshot.png"
                 >
                   <PinterestIcon round />
                 </PinterestShareButton>
