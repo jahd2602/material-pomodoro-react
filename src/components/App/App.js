@@ -18,14 +18,33 @@ import {
   Content,
   Icon,
   Drawer,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
   RadioGroup,
   Radio,
 } from 'react-mdl';
+import {
+  ShareButtons,
+  generateShareIcon,
+} from 'react-share';
+const {
+  FacebookShareButton,
+  GooglePlusShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  TelegramShareButton,
+  WhatsappShareButton,
+  PinterestShareButton,
+  RedditShareButton,
+} = ShareButtons;
+const FacebookIcon = generateShareIcon('facebook');
+const TwitterIcon = generateShareIcon('twitter');
+const TelegramIcon = generateShareIcon('telegram');
+const WhatsappIcon = generateShareIcon('whatsapp');
+const GooglePlusIcon = generateShareIcon('google');
+const LinkedinIcon = generateShareIcon('linkedin');
+const PinterestIcon = generateShareIcon('pinterest');
+const RedditIcon = generateShareIcon('reddit');
+
 import { version } from './../../../package.json';
 
 class App extends Component {
@@ -92,6 +111,8 @@ class App extends Component {
   };
 
   render() {
+    const shareUrl = 'http://zen.jahdsoft.com/';
+
     return !this.props.error ? (
       <div>
         <Layout fixedDrawer>
@@ -166,21 +187,76 @@ class App extends Component {
                 href="https://github.com/jahd2602/material-pomodoro-react"
                 target="blank"
               >
-                <Icon name="code" /> Github
+                <Icon name="code" /> Code on Github
               </a>
               <a
                 href="https://pe.linkedin.com/in/jairohonorio"
                 target="blank"
               >
-                <Icon name="portrait" /> LinkedIn
+                <Icon name="portrait" /> My LinkedIn
               </a>
               <a
                 href="mailto:jairo@jahdsoft.com"
                 target="blank"
               >
-                <Icon name="email" /> Email
+                <Icon name="email" /> Email me
               </a>
             </Navigation>
+
+            <Grid
+              className={s.socialContainer}
+            >
+              <Cell col={6}>
+                <FacebookShareButton url={shareUrl}>
+                  <FacebookIcon round />
+                </FacebookShareButton>
+              </Cell>
+
+              <Cell col={6}>
+                <TwitterShareButton url={shareUrl}>
+                  <TwitterIcon round />
+                </TwitterShareButton>
+              </Cell>
+
+              <Cell col={6}>
+                <GooglePlusShareButton url={shareUrl}>
+                  <GooglePlusIcon round />
+                </GooglePlusShareButton>
+              </Cell>
+
+              <Cell col={6}>
+                <LinkedinShareButton url={shareUrl}>
+                  <LinkedinIcon round />
+                </LinkedinShareButton>
+              </Cell>
+
+              <Cell col={6}>
+                <WhatsappShareButton url={shareUrl}>
+                  <WhatsappIcon round />
+                </WhatsappShareButton>
+              </Cell>
+
+              <Cell col={6}>
+                <TelegramShareButton url={shareUrl}>
+                  <TelegramIcon round />
+                </TelegramShareButton>
+              </Cell>
+
+              <Cell col={6}>
+                <RedditShareButton url={shareUrl}>
+                  <RedditIcon round />
+                </RedditShareButton>
+              </Cell>
+
+              <Cell col={6}>
+                <PinterestShareButton
+                  url={shareUrl}
+                  media="/images/screenshot.png"
+                >
+                  <PinterestIcon round />
+                </PinterestShareButton>
+              </Cell>
+            </Grid>
           </Drawer>
           <Content>
             <TomatoPage getConfig={this.onGetConfig} />
