@@ -9,7 +9,7 @@ import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './TomatoPage.scss';
 import { Howl } from 'howler';
-import { FABButton, Icon, Button, Grid, Cell, Chip } from 'react-mdl';
+import { FABButton, Icon, Button, Grid, Cell, Chip, Card, CardActions, CardTitle } from 'react-mdl';
 
 const title = 'Zen Pomodoro';
 
@@ -113,7 +113,9 @@ class TomatoPage extends Component {
   lastTick = Date.now();
   paused = true;
   mode = this.MODE_POMODORO;
-  showChip = true;
+  showWhatIsPomodoroChip = true;
+  showWDontLockDeviceChip = true;
+  showWDontLockDeviceCard = false;
 
   tickSound;
   turnSound;
@@ -202,14 +204,34 @@ class TomatoPage extends Component {
   };
 
   hideHelpChip = () => {
-    this.showChip = false;
+    this.showWhatIsPomodoroChip = false;
     this.forceUpdate();
+  };
+
+  hideDontLockDeviceChip = () => {
+    this.showWDontLockDeviceChip = false;
+    this.forceUpdate();
+  };
+
+  showDontLockDeviceCard = () => {
+    this.showWDontLockDeviceChip = false;
+    this.showWDontLockDeviceCard = true;
+    this.forceUpdate();
+  };
+
+  hideDontLockDeviceCard = () => {
+    this.showWDontLockDeviceCard = false;
+    this.forceUpdate();
+  };
+
+  sendMail = () => {
+    window.open('mailto:jairo@jahdsoft.com');
   };
 
   render() {
     return (
       <Grid className={s.root}>
-        { this.showChip ?
+        { this.showWhatIsPomodoroChip ?
           <Cell col={12} className="mdl-typography--text-center">
             <Chip className="mdl-color--white" onClose={this.hideHelpChip}>
               <a href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank"
@@ -219,6 +241,51 @@ class TomatoPage extends Component {
               </a>
             </Chip>
           </Cell> : null }
+
+        { this.showWDontLockDeviceChip ?
+          <Cell col={12} className="mdl-typography--text-center">
+            <Chip className="mdl-color--white" onClose={this.hideDontLockDeviceChip}>
+              <a href="#"
+                onClick={this.showDontLockDeviceCard}
+                className="mdl-color-text--black"
+              >
+                Don't lock your device. Why?
+              </a>
+            </Chip>
+          </Cell> : null }
+
+        { this.showWDontLockDeviceCard ?
+          <Cell
+            col={12}
+          >
+            <Card
+              shadow={1}
+              style={{ margin: 'auto' }}
+            >
+              <CardTitle expand>
+                <h4 style={{ marginTop: '0' }}>
+                  Modern mobile operating systems will stop background JavaScript code while locked.
+                  Thus, if locked, the timer will stop running. Please don't lock your device. This
+                  issue does not occur in native builds. A native build for Android and, maybe, iOS,
+                  may be released soon, if users, like you, are interested.
+                </h4>
+              </CardTitle>
+              <CardActions border>
+                <Button
+                  colored
+                  onClick={this.hideDontLockDeviceCard}
+                >
+                  OK
+                </Button>
+                <Button
+                  colored
+                  onClick={this.sendMail}
+                >Email me</Button>
+              </CardActions>
+            </Card>
+          </Cell>
+          : null }
+
         <Cell
           col={12}
           className={s.main}
